@@ -1,0 +1,5 @@
+Raw folder path: [HERE]/raw/objects 
+Create .txt file output: True	
+Output folder path: [HERE]		
+Use "name mode" on DF Duplisearch: True 
+DF Creaturescale gives very detailed output: True 

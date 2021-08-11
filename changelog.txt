@@ -1,0 +1,6 @@
+v1.1.3	- fixed ALLOWED_CLASS being missed as one of the tokens using creature classes
+v1.1.2  - bugfix surrounding GO_TO_END
+v1.1.1  - bugfix
+v1.1	- improved creature variation handling, new version of DF CVunpack
+v1.0.1 	- bugfix
+v1.0	- initial release
