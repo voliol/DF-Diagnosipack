@@ -34,7 +34,7 @@ def show_and_print_error(tool_name, error, traceback_string):
 # ====== Widget commands ===============================================================================================
 
 def diagnosipack_help_button_command():
-    messagebox.showinfo(message='DF Diagnosipack 1.1.3\nVoliol 2021\nDF Diagnosipack is a collection of modding tools '
+    messagebox.showinfo(message='DF Diagnosipack 1.1.4\nVoliol 2021\nDF Diagnosipack is a collection of modding tools '
                                 'for Dwarf Fortress, with a focus on diagnosing problems and getting statistics on what'
                                 ' is found within the raws. The tools in DF Diagnosipack were made (and tested) with '
                                 'DF 0.47 in mind, but should work on most earlier versions as well.',
@@ -156,7 +156,7 @@ def cvunpack_button_command():
 
 
 def cvunpack_help_button_command():
-    messagebox.showinfo(message='DF CVunpack 1.1\nVoliol 2021\n'
+    messagebox.showinfo(message='DF CVunpack 1.1.1\nVoliol 2021\n'
                                 'DF CVunpack unpacks creature variations, so you can see how the raws for e.g. '
                                 'wolf men *really* look (spoiler: they have 7 fingers). Its functionality came along '
                                 'when I made a base for other tools (and the other tools *do* unpack CVs), '

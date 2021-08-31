@@ -1351,7 +1351,11 @@ def apply_creature_variation(new_tokens, insertion_index, cv_tokens, exclamation
         if inside_cv_convert:
 
             if cv_token[0] == "CVCT_MASTER":
-                cv_convert_master = cv_token[1]
+                # CVCT_MASTER does not just take the token name, it may also take the first arguments.
+                # e.g. [CVCT_MASTER:BODY:HUMANOID] is just as valid as [CVCT_MASTER:BODY]
+                # Note that it only takes full arguments, [CVCT_MASTER:BODY:HUMANOID] prepares a conversion of
+                # [BODY:HUMANOID:...], not [BODY:HUMANOID_NECK:...] or [BODY:HUMANOID_LEGLESS:...].
+                cv_convert_master = cv_token[1:]
 
             elif cv_token[0] == "CVCT_TARGET":
                 cv_convert_target = ":".join(cv_token[1:])
@@ -1437,7 +1441,7 @@ def apply_creature_variation(new_tokens, insertion_index, cv_tokens, exclamation
     # second, applies cv_converts (in reverse order, from the "bottom")
     for cv_convert in reversed(pending_cv_converts):
         for i in range(len(new_tokens)):
-            if new_tokens[i][0] == cv_convert.master:
+            if new_tokens[i][0:len(cv_convert.master)] == cv_convert.master:
                 # joins the args temporarily, so a series of args can be targeted for replacement
                 args = ":".join(new_tokens[i][1:])
                 if cv_convert.target in args:
