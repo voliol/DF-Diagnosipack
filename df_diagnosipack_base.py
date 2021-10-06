@@ -159,9 +159,32 @@ class RawObject:
         self.tokens = tokens
         self.source_file_name = source_file_name
 
-    def has_token(self, token_name):
-        for token in self.tokens:
-            if token[0] == token_name:
+    def has_token(self, ask_token):
+        # takes either a string; checks for a token of that name
+        if type(ask_token) == str:
+            for token in self.tokens:
+                if token[0] == ask_token:
+                    return True
+            return False
+        # or a list (of strings); checks for a token of that name and those leading values.
+        # e.g. ask_token=["BODY", "QUADRUPED_NECK"] returns True for the vanilla toad raws, as those include
+        #      "[BODY:QUADRUPED_NECK:2_EYES:...:RIBCAGE]"
+        elif type(ask_token) == list:
+            for token in self.tokens:
+                if token[:len(ask_token)] == ask_token:
+                    return True
+            return False
+        else:
+            raise TypeError("Unexpected type for ask_token, ", type(ask_token), ". Expected str or list.")
+
+    def has_token_any(self, ask_tokens):
+        # like has_token, but takes a list of tokens
+        if type(ask_tokens) not in [list, tuple]:
+            raise TypeError("Unexpected type for ask_tokens, ", type(ask_tokens), ". Expected list or tuple.")
+
+        # uses self.has_token() to check each token
+        for ask_token in ask_tokens:
+            if self.has_token(ask_token):
                 return True
         return False
 
@@ -174,7 +197,9 @@ class RawObject:
                 return token_values
         return token_values
 
-    def get_last_token_value(self, token_name, error_message):
+    def get_last_token_value(self, token_name, error_message=None):
+        if error_message is None:
+            error_message = self.object_id + " does not use " + token_name
         try:
             self.get_token_values(token_name)[-1]
         except IndexError:
@@ -514,8 +539,8 @@ class Caste(RawObject):
                                               [bp.name for bp in self.top_level_body_parts])
                                     self.top_level_body_parts.append(selected_body_part)
 
-                                # otherwise goes through the "con tokens" and finds "parents" that satisfy the conditions
-                                # of each of those
+                                # otherwise goes through the "con tokens" and finds "parents" that satisfy the
+                                # conditions of each of those
                                 for con_token in con_tokens:
                                     parents = []
 
@@ -1262,6 +1287,7 @@ def read_and_load_all_raw_files(raw_path):
         filename = rawfilenames[i]
         rawfile = open(raw_path + "/" + filename, "r", encoding="latin1")
         rawfile_tokens = split_file_into_tokens(rawfile)
+        rawfile.close()
 
         # initially it doesn't know what object types to expect
         # and it has to know, because e.g. "COLOR" is both an object type and a common token elsewhere.

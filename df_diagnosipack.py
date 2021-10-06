@@ -11,6 +11,7 @@ from df_duplisearch import duplisearch_main
 from df_creatureclasser import creatureclasser_main
 from df_cvunpack import cvunpack_main
 from df_creaturescale import creaturescale_main
+from df_biomeviewer import biomeviewer_main
 
 # so it's easier to add/shuffle around the settings
 RAW_PATH_SETTING = 0
@@ -18,6 +19,16 @@ USE_OUTPUT_FILE_SETTING = 1
 OUTPUT_PATH_SETTING = 2
 USE_NAME_MODE_SETTING = 3
 VERY_DETAILED_WEIGHTS_SETTING = 4
+USE_MEDIAWIKI_OUTPUT_SETTING = 5
+
+
+def get_setting(number):
+    string = settings[number]
+    return string[string.find(":")+1:].strip()
+
+
+def get_bool_setting(number):
+    return get_setting(number).lower() in ["yes", "y", "true", "1"]
 
 
 def show_and_print_error(tool_name, error, traceback_string):
@@ -34,7 +45,7 @@ def show_and_print_error(tool_name, error, traceback_string):
 # ====== Widget commands ===============================================================================================
 
 def diagnosipack_help_button_command():
-    messagebox.showinfo(message='DF Diagnosipack 1.1.4\nVoliol 2021\nDF Diagnosipack is a collection of modding tools '
+    messagebox.showinfo(message='DF Diagnosipack 1.2\nVoliol 2021\nDF Diagnosipack is a collection of modding tools '
                                 'for Dwarf Fortress, with a focus on diagnosing problems and getting statistics on what'
                                 ' is found within the raws. The tools in DF Diagnosipack were made (and tested) with '
                                 'DF 0.47 in mind, but should work on most earlier versions as well.',
@@ -66,6 +77,7 @@ def update_settings_button_command():
     output_path_setting = output_path_entry.get()
     use_name_mode = use_name_mode_var.get()
     very_detailed_weights = very_detailed_weights_var.get()
+    use_mediawiki_output = use_mediawiki_output_var.get()
     # and their "real" counterparts
     raw_path = raw_path_setting.replace("[HERE]", os.getcwd())
     output_path = output_path_setting.replace("[HERE]", os.getcwd())
@@ -76,6 +88,8 @@ def update_settings_button_command():
     settings[USE_NAME_MODE_SETTING] = "Use \"name mode\" on DF Duplisearch: " + str(use_name_mode).capitalize()
     settings[VERY_DETAILED_WEIGHTS_SETTING] = "DF Creaturescale gives very detailed output: " + \
                                               str(very_detailed_weights).capitalize()
+    settings[USE_MEDIAWIKI_OUTPUT_SETTING] = "Format output of DF Biomeviewer for mediawiki: " + \
+                                             str(use_mediawiki_output).capitalize()
     # clears then writes the settings file
     temp_settings_file = open("df_diagnosipack_settings.txt", "w")
     temp_settings_file.write("\n".join(settings))
@@ -187,6 +201,34 @@ def creaturescale_help_button_command():
                         title="Help - DF Creaturescale")
 
 
+def biomeviewer_button_command():
+    print("Running DF Biomeviewer...")
+    try:
+        biomeviewer_main(raw_path, use_output_file, output_path, use_mediawiki_output)
+    except Exception as error:
+        traceback_string = traceback.format_exc()
+        show_and_print_error("DF Biomeviewer", error, traceback_string)
+
+
+def biomeviewer_help_button_command():
+    messagebox.showinfo(message='DF Biomeviewer 1.0\nVoliol 2021\n'
+                                'DF Biomeviewer allows you to view biomes, or rather what creatures and plants can '
+                                'be found in each and every biome. It should be useful for the mod user as well as the '
+                                'mod(pack) creator. Just note that the biomes described by this tool are *not* '
+                                'equivalent to the regions found in-game, these include a subset of the creatures and '
+                                'plants of the relevant biomes.'
+                                '\nBiomeviewer acts as a separate application, and provides two view modes: '
+                                'one for viewing categories of biomes like the wiki does it (such as "Forests" or '
+                                '"Deserts"), and one for viewing specific biomes (such as FOREST_TROPICAL_CONIFER or '
+                                'DESERT_BADLAND). These tables may also be printed out (in console or in a .txt file). '
+                                'These printouts may be set to use Mediawiki formatting, to facilitate the making '
+                                'of wiki pages.'
+                                '\nAs it is a new tool, there may be minor errors to the background logic. Do not '
+                                'trust this tool completely (yet) when it comes to the odder biomes like the lava sea '
+                                'and HFS.',
+                        title="Help - DF Biomeviewer")
+
+
 def andmore_button_command():
     messagebox.showinfo(message='Are there more tools? Mostly no. These are all the tools currently in this pack. '
                                 ' However, these tools are built on a common base (df_diagnosipack_base.py), '
@@ -210,14 +252,12 @@ def andmore_button_command():
 # gets settings
 settings_file = open("df_diagnosipack_settings.txt", "r")
 settings = [wline for wline in settings_file]
-raw_path_setting = settings[RAW_PATH_SETTING].replace("Raw folder path:", "").strip()
-use_output_file = settings[USE_OUTPUT_FILE_SETTING].replace("Create .txt file output:", "").strip().lower() in \
-                          ["yes", "y", "true", "1"]
-output_path_setting = settings[OUTPUT_PATH_SETTING].replace("Output folder path:", "").strip()
-use_name_mode = settings[USE_NAME_MODE_SETTING].replace("Use \"name mode\" on DF Duplisearch:", "").strip().lower() in \
-                          ["yes", "y", "true", "1"]
-very_detailed_weights = settings[VERY_DETAILED_WEIGHTS_SETTING].replace("DF Creaturescale gives very detailed output:",
-                                                                        "").strip().lower() in ["yes", "y", "true", "1"]
+raw_path_setting = get_setting(RAW_PATH_SETTING)
+use_output_file = get_bool_setting(USE_OUTPUT_FILE_SETTING)
+output_path_setting = get_setting(OUTPUT_PATH_SETTING)
+use_name_mode = get_bool_setting(USE_NAME_MODE_SETTING)
+very_detailed_weights = get_bool_setting(VERY_DETAILED_WEIGHTS_SETTING)
+use_mediawiki_output = get_bool_setting(USE_MEDIAWIKI_OUTPUT_SETTING)
 settings_file.close()
 
 # because these two can be formatted in the settings file, they have a separate settings variable and "true" variable
@@ -278,6 +318,12 @@ very_detailed_weights_cb = tk.Checkbutton(settings_frame, text='DF Creaturescale
                                           onvalue=True, offvalue=False)
 very_detailed_weights_cb.grid(column=1, row=4, columnspan=2)
 
+use_mediawiki_output_var = tk.BooleanVar(value=use_mediawiki_output)
+use_mediawiki_output_cb = tk.Checkbutton(settings_frame, text='Format output of DF Biomeviewer for mediawiki',
+                                         var=use_mediawiki_output_var,
+                                         onvalue=True, offvalue=False)
+use_mediawiki_output_cb.grid(column=1, row=5, columnspan=2)
+
 # update settings
 tk.Button(mainframe, text="Update settings", command=update_settings_button_command).grid(column=0, row=1,
                                                                                           sticky=tk.E)
@@ -296,7 +342,9 @@ tk.Button(tools_frame, text="DF CVunpack", command=cvunpack_button_command).grid
 tk.Button(tools_frame, text="?", command=cvunpack_help_button_command).grid(column=1, row=2)
 tk.Button(tools_frame, text="DF Creaturescale", command=creaturescale_button_command).grid(column=0, row=3)
 tk.Button(tools_frame, text="?", command=creaturescale_help_button_command).grid(column=1, row=3)
-tk.Button(tools_frame, text="And more...?", command=andmore_button_command).grid(column=2, row=0, padx=5)
+tk.Button(tools_frame, text="DF Biomeviewer", command=biomeviewer_button_command).grid(column=2, row=0)
+tk.Button(tools_frame, text="?", command=biomeviewer_help_button_command).grid(column=3, row=0)
+tk.Button(tools_frame, text="And more...?", command=andmore_button_command).grid(column=2, row=1, padx=5)
 
 # gets the logo image
 image = ImageTk.PhotoImage(Image.open('logo.png'))
