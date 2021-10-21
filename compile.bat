@@ -19,35 +19,35 @@ Rem if you've added a new setting in the source code, remember to add it to here
 @echo off
 
 Rem creates the folders
-md v1.2
-md v1.2\DF_Diagnosipack_1.2
+md v1.2.1
+md v1.2.1\DF_Diagnosipack_1.2.1
 
 Rem copies over most files (including this one)
-copy df_diagnosipack.py v1.2\DF_Diagnosipack_1.2
-copy df_diagnosipack_base.py v1.2\DF_Diagnosipack_1.2
+copy df_diagnosipack.py v1.2.1\DF_Diagnosipack_1.2.1
+copy df_diagnosipack_base.py v1.2.1\DF_Diagnosipack_1.2.1
 
-copy df_creatureclasser.py v1.2\DF_Diagnosipack_1.2
-copy df_creaturescale.py v1.2\DF_Diagnosipack_1.2
-copy df_cvunpack.py v1.2\DF_Diagnosipack_1.2
-copy df_duplisearch.py v1.2\DF_Diagnosipack_1.2
-copy df_biomeviewer.py v1.2\DF_Diagnosipack_1.2
+copy df_creatureclasser.py v1.2.1\DF_Diagnosipack_1.2.1
+copy df_creaturescale.py v1.2.1\DF_Diagnosipack_1.2.1
+copy df_cvunpack.py v1.2.1\DF_Diagnosipack_1.2.1
+copy df_duplisearch.py v1.2.1\DF_Diagnosipack_1.2.1
+copy df_biomeviewer.py v1.2.1\DF_Diagnosipack_1.2.1
 
-copy verticalscrolledframe.py v1.2\DF_Diagnosipack_1.2
+copy doublescrolledframe.py v1.2.1\DF_Diagnosipack_1.2.1
 
-copy icon.ico v1.2\DF_Diagnosipack_1.2
-copy logo.png v1.2\DF_Diagnosipack_1.2
+copy icon.ico v1.2.1\DF_Diagnosipack_1.2.1
+copy logo.png v1.2.1\DF_Diagnosipack_1.2.1
 
-copy changelog.txt v1.2\DF_Diagnosipack_1.2
-copy temp_settings.txt v1.2\DF_Diagnosipack_1.2
+copy changelog.txt v1.2.1\DF_Diagnosipack_1.2.1
+copy temp_settings.txt v1.2.1\DF_Diagnosipack_1.2.1
 
-copy UNLICENSE.txt v1.2\DF_Diagnosipack_1.2
-copy readme_compile.txt v1.2\DF_Diagnosipack_1.2
-copy compile.bat v1.2\DF_Diagnosipack_1.2
+copy UNLICENSE.txt v1.2.1\DF_Diagnosipack_1.2.1
+copy readme_compile.txt v1.2.1\DF_Diagnosipack_1.2.1
+copy compile.bat v1.2.1\DF_Diagnosipack_1.2.1
 
 Rem creates new (empty) file for errorlog
-type NUL > v1.2\DF_Diagnosipack_1.2\df_diagnosipack_errorlog.txt
+type NUL > v1.2.1\DF_Diagnosipack_1.2.1\df_diagnosipack_errorlog.txt
 Rem renames temp_settings.txt
-ren v1.2\DF_Diagnosipack_1.2\temp_settings.txt df_diagnosipack_settings.txt
+ren v1.2.1\DF_Diagnosipack_1.2.1\temp_settings.txt df_diagnosipack_settings.txt
 
 Rem runs pyinstaller to create the exe version
 @echo on
@@ -56,16 +56,16 @@ pyinstaller -i icon.ico -F df_diagnosipack.py
 @echo off
 
 Rem moves the dist folder, renames it, and copies over the needed files
-move dist v1.2\DF_Diagnosipack_exe_1.2
+move dist v1.2.1\DF_Diagnosipack_exe_1.2.1
 
-copy icon.ico v1.2\DF_Diagnosipack_exe_1.2
-copy logo.png v1.2\DF_Diagnosipack_exe_1.2
-copy changelog.txt v1.2\DF_Diagnosipack_exe_1.2
-copy temp_settings.txt v1.2\DF_Diagnosipack_exe_1.2
-copy UNLICENSE.txt v1.2\DF_Diagnosipack_exe_1.2
+copy icon.ico v1.2.1\DF_Diagnosipack_exe_1.2.1
+copy logo.png v1.2.1\DF_Diagnosipack_exe_1.2.1
+copy changelog.txt v1.2.1\DF_Diagnosipack_exe_1.2.1
+copy temp_settings.txt v1.2.1\DF_Diagnosipack_exe_1.2.1
+copy UNLICENSE.txt v1.2.1\DF_Diagnosipack_exe_1.2.1
 
-type NUL > v1.2\DF_Diagnosipack_exe_1.2\df_diagnosipack_errorlog.txt
-ren v1.2\DF_Diagnosipack_exe_1.2\temp_settings.txt df_diagnosipack_settings.txt
+type NUL > v1.2.1\DF_Diagnosipack_exe_1.2.1\df_diagnosipack_errorlog.txt
+ren v1.2.1\DF_Diagnosipack_exe_1.2.1\temp_settings.txt df_diagnosipack_settings.txt
 
 Rem cleans up
 @echo on

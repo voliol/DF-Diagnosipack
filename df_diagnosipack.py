@@ -45,7 +45,7 @@ def show_and_print_error(tool_name, error, traceback_string):
 # ====== Widget commands ===============================================================================================
 
 def diagnosipack_help_button_command():
-    messagebox.showinfo(message='DF Diagnosipack 1.2\nVoliol 2021\nDF Diagnosipack is a collection of modding tools '
+    messagebox.showinfo(message='DF Diagnosipack 1.2.1\nVoliol 2021\nDF Diagnosipack is a collection of modding tools '
                                 'for Dwarf Fortress, with a focus on diagnosing problems and getting statistics on what'
                                 ' is found within the raws. The tools in DF Diagnosipack were made (and tested) with '
                                 'DF 0.47 in mind, but should work on most earlier versions as well.',
@@ -211,7 +211,7 @@ def biomeviewer_button_command():
 
 
 def biomeviewer_help_button_command():
-    messagebox.showinfo(message='DF Biomeviewer 1.0\nVoliol 2021\n'
+    messagebox.showinfo(message='DF Biomeviewer 1.1\nVoliol 2021\n'
                                 'DF Biomeviewer allows you to view biomes, or rather what creatures and plants can '
                                 'be found in each and every biome. It should be useful for the mod user as well as the '
                                 'mod(pack) creator. Just note that the biomes described by this tool are *not* '
@@ -223,6 +223,11 @@ def biomeviewer_help_button_command():
                                 'DESERT_BADLAND). These tables may also be printed out (in console or in a .txt file). '
                                 'These printouts may be set to use Mediawiki formatting, to facilitate the making '
                                 'of wiki pages.'
+                                '\n"Niches" in Biomeviewer are the categories of creature (i.e. species using '
+                                '"LARGE_ROAMING"), vermin, shrub, tree, and grass. '
+                                'Species that fit none of these categories will be marked as having no niche. This can '
+                                'indicate an error in the raws, but also that the species is e.g. a megabeast, '
+                                'a civilized creature, or otherwise is not supposed to appear naturally in any biome. '
                                 '\nAs it is a new tool, there may be minor errors to the background logic. Do not '
                                 'trust this tool completely (yet) when it comes to the odder biomes like the lava sea '
                                 'and HFS.',
@@ -231,17 +236,17 @@ def biomeviewer_help_button_command():
 
 def andmore_button_command():
     messagebox.showinfo(message='Are there more tools? Mostly no. These are all the tools currently in this pack. '
-                                ' However, these tools are built on a common base (df_diagnosipack_base.py), '
-                                ' which can handle unpacking creature variants, body parts etc.. This base should '
-                                'facilitate making a new tool, as those are the most annoying parts of the raws to'
-                                ' deal with. '
+                                'However, these tools are built on a common base (df_diagnosipack_base.py), '
+                                'which can handle unpacking creature variants, body parts etc.. This base should '
+                                'facilitate making a new tool, as those are the most annoying parts of the raws to '
+                                'deal with. '
                                 'If you are acquainted with Python, consider giving it a try! '
                                 '\n\n'
-                                'With that in mind, I am not a professional programmer. If something confuses you about'
-                                ' my code, ask me about it and I will explain as best as I can, and look at possible '
-                                'adjustments for the next version of DF Diagnosipack. '
-                                ' This is also an early version, so all parts needed for your specific tool may not '
-                                'be provided. Creatures are pretty well supported, I think.'
+                                'With that in mind, I am not a professional programmer. If something confuses you '
+                                'about my code, ask me about it and I will explain as best as I can, and look at '
+                                'possible adjustments for the next version of DF Diagnosipack. '
+                                'This is also an early version, so all parts needed for your specific tool may not '
+                                'be provided. Creatures are pretty well supported, I think. '
                                 '\nI am reachable on the Bay 12 forums.'
                                 '\n\n//sincerely, Voliol, 2021-07-11 :)',
                         title="And more...?")

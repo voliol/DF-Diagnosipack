@@ -3,7 +3,7 @@ from importlib import reload
 import tabulate
 import tkinter as tk
 from tkinter import ttk
-from verticalscrolledframe import VerticalScrolledFrame
+from doublescrolledframe import DoubleScrolledFrame
 
 # This tool was/is the first one to use an application of its own instead of just running in text mode.
 # This is a testament to the great amount of data that needed to be portrayed, and it should not be assumed
@@ -371,6 +371,11 @@ def get_niche_data(biome_list, niche, biotope="biotope", vertical_biome_abbrs=Tr
         datarow += [biome.biome_abbr for biome in biome_list]
     # frequency column
     datarow.append("F")
+    # ubiquitous column
+    if vertical_biome_abbrs:
+        datarow.append("U\nB\n?")
+    else:
+        datarow.append("UB?")
     # large predator column
     if niche == "CREATURE":
         if vertical_biome_abbrs:
@@ -400,13 +405,17 @@ def get_niche_data(biome_list, niche, biotope="biotope", vertical_biome_abbrs=Tr
         else:
             species_frequency = "50"
         datarow.append(species_frequency)
+        # ubiquitous
+        if species.has_token("UBIQUITOUS"):
+            datarow.append("Y")
+        else:
+            datarow.append(" ")
         # large predator
         if niche == "CREATURE":
             if species.has_token("LARGE_PREDATOR"):
                 datarow.append("Y")
             else:
                 datarow.append(" ")
-
         data.append(datarow)
 
     return data
@@ -451,11 +460,13 @@ def update_niche_tabs():
         for biome in visible_biomes:
             desc_text += biome.biome_id + " (" + biome.biome_abbr + "); "
         if niche == "CREATURE":
-            desc_text += "\nF stands for FREQUENCY, LP stands for LARGE_PREDATOR. Species with high FREQUENCY are" \
-                         "more likely to appear, and only a limited amount of LARGE_PREDATOR species may be included " \
-                         "in each in-game region."
+            desc_text += "\nF stands for FREQUENCY, UB for UBIQUITOUS, LP for LARGE_PREDATOR. Species with high " \
+                         "FREQUENCY are more likely to appear. UBIQUITOUS species are guaranteed to be included in " \
+                         "in-game regions. Only a limited amount of LARGE_PREDATOR species may " \
+                         "be included in each in-game region."
         else:
-            desc_text += "F stands for FREQUENCY. Species with high FREQUENCY are more likely to appear."
+            desc_text += "F stands for FREQUENCY, UB for UBIQUITOUS. Species with high FREQUENCY are more likely to " \
+                         "appear. UBIQUITOUS species are guaranteed to be included in in-game regions."
         desc_label = tk.Label(niche_tab, text=desc_text, anchor="w", wraplength=DESCRIPTOR_WRAPLENGTH)
         desc_label.grid(row=0, column=0, sticky=tk.W)
 
@@ -530,9 +541,10 @@ def print_biome_category(biome_category):
     desc_text = "There are " + str(len(biome_list)) + " kinds of " + biome_category[0] + ":\n"
     for biome in biome_list:
         desc_text += biome.biome_id + " (" + biome.biome_abbr + "); "
-    desc_text += "\nF stands for FREQUENCY, LP stands for LARGE_PREDATOR. Species with high FREQUENCY are" \
-                 "more likely to appear, and only a limited amount of LARGE_PREDATOR species may be included " \
-                 "in each in-game region."
+    desc_text += "\nF stands for FREQUENCY, UB for UBIQUITOUS, LP for LARGE_PREDATOR. Species with high " \
+                 "FREQUENCY are more likely to appear. UBIQUITOUS species are guaranteed to be included in " \
+                 "in-game regions. Only a limited amount of LARGE_PREDATOR species may " \
+                 "be included in each in-game region."
     base.either_print(desc_text, uof)
 
     for niche in all_niches:
@@ -763,7 +775,7 @@ def biomeviewer_main(raw_path, uof, output_path, umwo):
     niche_notebook.grid(column=2, row=0, columnspan=4)
     niche_tabs = []
     for niche_name in all_niches:
-        niche_tab = VerticalScrolledFrame(niche_notebook, width=TAB_WIDTH, height=TAB_HEIGHT)
+        niche_tab = DoubleScrolledFrame(niche_notebook, width=TAB_WIDTH, height=TAB_HEIGHT)
         niche_tab.grid_propagate(False)
         niche_notebook.add(niche_tab, text=niche_name.capitalize())
         niche_tabs.append(niche_tab)
@@ -774,7 +786,7 @@ def biomeviewer_main(raw_path, uof, output_path, umwo):
     # isn't gridded yet; as it fits in the same spot as niche_book (and is thus "hidden" to begin with)
     alignment_tabs = []
     for alignment in all_alignments:
-        alignment_tab = VerticalScrolledFrame(alignment_notebook, width=TAB_WIDTH, height=TAB_HEIGHT)
+        alignment_tab = DoubleScrolledFrame(alignment_notebook, width=TAB_WIDTH, height=TAB_HEIGHT)
         alignment_tab.grid_propagate(False)
         alignment_notebook.add(alignment_tab, text=alignment[0])
         alignment_tabs.append(alignment_tab)
